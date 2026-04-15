@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NextHire AI – Ultimate Job Portal</title>
+  <link rel="stylesheet" href="css/main.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<!-- ── AUTH PAGE ── -->
+<div id="authPage" class="auth-page">
+  <div class="auth-left">
+    <div style="position:relative;z-index:1">
+      <div class="logo" style="padding:0 0 32px;border:none">
+        <div class="logo-icon">⚡</div>
+        <div class="logo-text">Next<span>Hire</span> AI</div>
+      </div>
+      <h1 style="font-size:42px;font-weight:800;line-height:1.2;margin-bottom:20px">
+        The Future of<br>Hiring is <span style="background:linear-gradient(135deg,#6c63ff,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Here</span>
+      </h1>
+      <p style="color:var(--muted);font-size:16px;line-height:1.7;max-width:400px">AI-powered matching. Real-time insights. Seamless hiring experience for modern teams and ambitious candidates.</p>
+      <div style="margin-top:40px;display:flex;flex-direction:column;gap:14px">
+        <div class="flex-center gap-12" style="color:var(--muted);font-size:14px"><span style="color:var(--green)">✓</span> Smart candidate matching with AI</div>
+        <div class="flex-center gap-12" style="color:var(--muted);font-size:14px"><span style="color:var(--green)">✓</span> Real-time application tracking</div>
+        <div class="flex-center gap-12" style="color:var(--muted);font-size:14px"><span style="color:var(--green)">✓</span> Integrated video interviews</div>
+        <div class="flex-center gap-12" style="color:var(--muted);font-size:14px"><span style="color:var(--green)">✓</span> Analytics & hiring insights</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-right">
+    <div class="auth-form" style="margin:auto">
+      <h2 class="auth-title" id="authTitle">Welcome back</h2>
+      <p class="auth-sub" id="authSub">Sign in to your account</p>
+
+      <div class="role-selector" id="roleSelector" style="display:none">
+        <button class="role-btn" data-role="candidate" onclick="selectRole('candidate')">
+          <span class="role-icon">👨‍🎓</span> Candidate
+        </button>
+        <button class="role-btn active" data-role="recruiter" onclick="selectRole('recruiter')">
+          <span class="role-icon">👔</span> Recruiter
+        </button>
+      </div>
+
+      <form onsubmit="handleAuth(event)">
+        <div class="form-group" id="nameGroup" style="display:none">
+          <label class="form-label">Full Name</label>
+          <input id="authName" class="form-input" type="text" placeholder="John Doe">
+        </div>
+        <div class="form-group" id="companyGroup" style="display:none">
+          <label class="form-label">Company Name</label>
+          <input id="authCompany" class="form-input" type="text" placeholder="Acme Corp">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input id="authEmail" class="form-input" type="email" placeholder="you@example.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input id="authPassword" class="form-input" type="password" placeholder="••••••••" required>
+          <div id="passwordHint" class="text-muted" style="font-size:11px;margin-top:4px;display:none">
+            Must be 8-16 chars, with uppercase, number & special char
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg w-full" style="justify-content:center;margin-bottom:20px" id="authBtn">Sign In</button>
+      </form>
+      <div class="text-muted" style="font-size:13px;text-align:center" id="authToggle">
+        Don't have an account? <a href="#" onclick="toggleAuth('signup')" class="text-accent">Sign up</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── APP PAGE ── -->
+<div id="appPage" class="app hidden">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">⚡</div>
+      <div class="logo-text">Next<span>Hire</span></div>
+    </div>
+    <nav class="nav" id="sidebarNav"></nav>
+    <div class="sidebar-footer">
+      <div class="user-mini" onclick="navigate('profile')">
+        <div class="avatar" id="sidebarAvatar">?</div>
+        <div class="user-info">
+          <div class="user-name" id="sidebarUserName">Loading...</div>
+          <div class="user-role" id="sidebarUserRole"></div>
+        </div>
+        <button class="btn btn-glass btn-sm btn-icon" onclick="event.stopPropagation();logout()" title="Logout">↩</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- PAGES -->
+    <div id="page-dashboard" class="page"></div>
+    <div id="page-jobs" class="page"></div>
+    <div id="page-candidates" class="page"></div>
+    <div id="page-applications" class="page"></div>
+    <div id="page-saved" class="page"></div>
+    <div id="page-interviews" class="page"></div>
+    <div id="page-messages" class="page"></div>
+    <div id="page-analytics" class="page"></div>
+    <div id="page-profile" class="page"></div>
+    
+    <!-- Admin Pages -->
+    <div id="page-admin-dashboard" class="page"></div>
+    <div id="page-admin-users" class="page"></div>
+    <div id="page-admin-recruiter-requests" class="page"></div>
+    <div id="page-admin-recruiters" class="page"></div>
+    <div id="page-admin-candidates" class="page"></div>
+    <div id="page-admin-jobs" class="page"></div>
+    <div id="page-admin-pipeline" class="page"></div>
+    <div id="page-admin-logs" class="page"></div>
+
+    <!-- Dynamic modals mounted here -->
+    <div id="profileModal"></div>
+    <div id="jobDetailModal"></div>
+
+  </main>
+</div>
+
+<!-- ── MODALS ── -->
+
+<!-- Job Modal -->
+<div class="modal-overlay" id="jobModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Post a Job</div>
+      <button type="button" class="modal-close" onclick="this.closest('.modal-overlay').classList.remove('open')">✕</button>
+    </div>
+    <form id="jobForm" onsubmit="submitJob(event)">
+      <input type="hidden" id="jobId">
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Job Title *</label>
+          <input id="jobTitle" class="form-input" placeholder="Senior Frontend Engineer" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Department</label>
+          <input id="jobDept" class="form-input" placeholder="Engineering">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description *</label>
+        <textarea id="jobDesc" class="form-input" placeholder="Describe the role, responsibilities, requirements..." required></textarea>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Location *</label>
+          <input id="jobLocation" class="form-input" placeholder="City/Office location (e.g. New York)">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Job Type</label>
+          <select id="jobType" class="form-input">
+            <option>Full-time</option><option>Part-time</option><option>Remote</option><option>Contract</option><option>Internship</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Salary Range</label>
+          <input id="jobSalary" class="form-input" placeholder="$80k – $120k">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Required Skills</label>
+          <input id="jobSkills" class="form-input" placeholder="React, Node.js, TypeScript">
+        </div>
+      </div>
+      <div class="flex gap-12">
+        <button type="button" class="btn btn-glass" onclick="closeModal('jobModal')">Cancel</button>
+        <button type="submit" class="btn btn-primary ml-auto">Post Job →</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Interview Modal -->
+<div class="modal-overlay" id="interviewModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Schedule Interview</div>
+      <button type="button" class="modal-close" onclick="this.closest('.modal-overlay').classList.remove('open')">✕</button>
+    </div>
+    <form onsubmit="submitInterview(event)">
+      <input type="hidden" id="iAppId">
+      <div class="form-group">
+        <label class="form-label">Application ID *</label>
+        <input id="iAppIdDisplay" class="form-input" placeholder="Paste Application ID from Candidates page">
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Date *</label>
+          <input id="iDate" class="form-input" type="date" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Time *</label>
+          <input id="iTime" class="form-input" type="time" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Interview Type</label>
+        <select id="iType" class="form-input">
+          <option>Video Call</option><option>Phone</option><option>In-Person</option><option>Technical</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Meeting Link</label>
+        <input id="iLink" class="form-input" placeholder="https://meet.google.com/...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes</label>
+        <textarea id="iNotes" class="form-input" placeholder="Interview focus areas, preparation notes..."></textarea>
+      </div>
+      <div class="flex gap-12">
+        <button type="button" class="btn btn-glass" onclick="closeModal('interviewModal')">Cancel</button>
+        <button type="submit" class="btn btn-primary ml-auto">Schedule →</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Edit Profile Modal -->
+<div class="modal-overlay" id="editProfileModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Edit Profile</div>
+      <button type="button" class="modal-close" onclick="this.closest('.modal-overlay').classList.remove('open')">✕</button>
+    </div>
+    <form onsubmit="submitProfile(event)">
+      <div class="form-group">
+        <label class="form-label">Professional Title</label>
+        <input id="pTitle" class="form-input" placeholder="e.g. Senior Full Stack Developer">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Bio</label>
+        <textarea id="pBio" class="form-input" placeholder="Tell recruiters about yourself..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Skills (comma separated)</label>
+        <input id="pSkills" class="form-input" placeholder="React, Node.js, Python, AWS">
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Experience</label>
+          <input id="pExp" class="form-input" placeholder="5 years in Frontend">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Education</label>
+          <input id="pEdu" class="form-input" placeholder="B.Tech, IIT Delhi">
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">LinkedIn</label>
+          <input id="pLinkedin" class="form-input" placeholder="linkedin.com/in/...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">GitHub</label>
+          <input id="pGithub" class="form-input" placeholder="github.com/...">
+        </div>
+      </div>
+      <div class="flex gap-12">
+        <button type="button" class="btn btn-glass" onclick="closeModal('editProfileModal')">Cancel</button>
+        <button type="submit" class="btn btn-primary ml-auto">Save Profile →</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Upload Resume Modal -->
+<div class="modal-overlay" id="uploadResumeModal">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-header">
+      <div class="modal-title">Upload Resume</div>
+      <button type="button" class="modal-close" onclick="this.closest('.modal-overlay').classList.remove('open')">✕</button>
+    </div>
+    <form onsubmit="uploadResume(event)">
+      <div class="form-group">
+        <label class="form-label">PDF Resume</label>
+        <input id="resumeFile" class="form-input" type="file" accept=".pdf">
+      </div>
+      <button type="submit" class="btn btn-primary w-full" style="justify-content:center">Upload →</button>
+    </form>
+  </div>
+</div>
+
+<!-- ── TOAST CONTAINER ── -->
+<div id="toastContainer" class="toast-container"></div>
+
+<script src="js/app.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/recruiter.js"></script>
+<script src="js/candidate.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
